@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const mainControllers = require('../controllers/mainController');
+const middleware = require('../middlewares/jwt');
 
 // CRUD Users
 router.get('/getAllUser', mainControllers.getAllUser);
@@ -12,7 +13,7 @@ router.post('/addOneUser', mainControllers.addOneUser);
 router.put('/updateDealerStatus', mainControllers.updateDealerStatus);
 
 // CRUD Mobil
-router.get('/getAllMobil', mainControllers.getAllMobil);
+router.get('/getAllMobil', middleware.authenticateToken, mainControllers.getAllMobil);
 router.get('/getAllOrderJoinMobil', mainControllers.getAllOrderJoinMobil);
 router.delete('/deleteOneMobil', mainControllers.deleteOneMobil);
 router.put('/updateOneMobil', mainControllers.updateOneMobil);
