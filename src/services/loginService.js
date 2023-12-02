@@ -1,5 +1,12 @@
 const { db } = require('../config/connectToDb');
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1m",
+  });
+}
 
 async function login(user, session) {
   const { username, password } = user;
@@ -32,9 +39,11 @@ async function login(user, session) {
     if (pass) {
       session.user = user;
       session.authorized = true;
+      const accessToken = generateAccessToken({ username: username });
       return {
         message: 'Login successful',
-        user: user
+        user: user,
+        accessToken: accessToken
       }
     } else {
       return {
